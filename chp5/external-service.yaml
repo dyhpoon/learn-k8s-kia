@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-service          
+spec:                             
+  ports:
+  - port: 80
+
+# If you create a service without a pod selector, 
+# Kubernetes won’t even create the Endpoints resource (after all, 
+# without a selector, it can’t know which pods to include in the service). 
+# It’s up to you to create the Endpoints resource to specify the list of endpoints for the service.

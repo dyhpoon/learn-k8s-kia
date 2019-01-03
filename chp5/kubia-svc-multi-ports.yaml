@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubia
+spec:
+  ports:
+  - name: http
+    port: 80                
+    targetPort: 8080          # can refer to the pod's port name, use name instead of number, (ex: http)
+  - name: https
+    port: 443
+    targetPort: 8443          # can refer to the pod's port name, use name instead of number, (ex: https)
+  selector:                 
+    app: kubia              
+
+# if you name pod's port with name
+# kind: Pod
+# spec:
+#   containers:
+#   - name: kubia
+#     ports:
+#     - name: http               
+#       containerPort: 8080      
+#     - name: https              
+#       containerPort: 8443      

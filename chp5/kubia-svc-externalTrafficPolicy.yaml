@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubia-nodeport-external-traffic-policy
+spec:
+  type: NodePort             
+  externalTrafficPolicy: Local # prevent additional network hop to service proxy, but go to the the current node's pod (if exist)
+  ports:
+  - port: 80                 
+    targetPort: 8080         
+    nodePort: 30123          
+  selector:
+    app: kubia
+
+# also there is a drawback where connections are not evenly distribute across all the pods
