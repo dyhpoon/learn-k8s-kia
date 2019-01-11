@@ -1,0 +1,2 @@
+# kubectl get clusterrole system:discovery -o yaml
+# kubectl get clusterrolebinding system:discovery -o yaml

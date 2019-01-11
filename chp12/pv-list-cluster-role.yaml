@@ -1,0 +1,11 @@
+# kubectl create clusterrole pv-reader --verb=get,list --resource=persistentvolumes
+# kubectl get clusterrole pv-reader -o yaml
+
+# kubectl create rolebinding pv-test --clusterrole=pv-reader --serviceaccount=foo:default -n foo
+# after that, curl localhost:8001/api/v1/persistentvolumes in "foo" will return an error
+# kubectl get rolebindings pv-test -o yaml -n foo
+
+# coz this is a rolebinding not clusterrolebinding
+# kubectl delete rolebinding pv-test
+# kubectl create clusterrolebinding pv-test --clusterrole=pv-reader --serviceaccount=foo:default
+# curl localhost:8001/api/v1/persistentvolumes

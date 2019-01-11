@@ -1,0 +1,10 @@
+# what happen if you bind clusterrole to a rolebinding?
+
+# curl localhost:8001/api/v1/pods
+# curl localhost:8001/api/v1/namespaces/foo/pods
+
+# create a clusterRoleBinding
+# kubectl create clusterrolebinding view-test --clusterrole=view --serviceaccount=foo:default
+# curl localhost:8001/api/v1/namespaces/foo/pods
+# curl localhost:8001/api/v1/namespaces/bar/pods
+# curl localhost:8001/api/v1/pods

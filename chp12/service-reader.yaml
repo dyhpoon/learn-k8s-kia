@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: foo                     
+  name: service-reader
+rules:
+- apiGroups: [""]                    
+  verbs: ["get", "list"]             
+  resources: ["services"]            
+
+
+# or you can do this with the following command (namespace: bar)
+# kubectl create role service-reader --verb=get --verb=list --resource=services -n bar
+
+# create rolebinding
+# kubectl create rolebinding test --role=service-reader --serviceaccount=foo:default -n foo
