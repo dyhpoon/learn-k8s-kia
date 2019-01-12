@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-shared-volume-fsgroup
+spec:
+  securityContext:                       
+    fsGroup: 555                         
+    supplementalGroups: [666, 777]       
+  containers:
+  - name: first
+    image: alpine
+    command: ["/bin/sleep", "999999"]
+    securityContext:                     
+      runAsUser: 1111                    
+    volumeMounts:                        
+    - name: shared-volume                
+      mountPath: /volume
+      readOnly: false
+  - name: second
+    image: alpine
+    command: ["/bin/sleep", "999999"]
+    securityContext:                     
+      runAsUser: 2222                    
+    volumeMounts:                        
+    - name: shared-volume                
+      mountPath: /volume
+      readOnly: false
+  volumes:                               
+  - name: shared-volume                  
+    emptyDir:
+
+# kubectl exec -it pod-with-shared-volume-fsgroup -c first sh
+# $ id
+# uid=1111 gid=0(root) groups=555,666,777
+# $ ls -l / | grep volume
+
+# if you create a file in the mounted volume’s directory, the file is owned by user ID 1111 (that’s the user ID the container is running as) and by group ID 555:
+# $ echo foo > /volume/foo
+# $ ls -l /volume
+
+# This is different from how ownership is otherwise set up for newly created files. Usually, the user’s effective group ID, which is 0 in your case, is used when a user creates files. You can see this by creating a file in the container’s filesystem instead of in the volume
+# $ echo foo > /tmp/foo
+# $ ls -l /tmp
+
+# the fsGroup security context property is used when the process creates files in a volume (but this depends on the volume plugin used)
+# whereas the supplementalGroups property defines a list of additional group IDs the user is associated with

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-host-pid-and-ipc
+spec:
+  hostPID: true                      
+  hostIPC: true                      
+  containers:
+  - name: main
+    image: alpine
+    command: ["/bin/sleep", "999999"]
+
+
+# hostPID: you want the pod to use the host's PID namespace
+# hostIPC: you want the pod to use the host's IPC namespace
+# setting hostIPC to true, processes in the pod's can communicate with the node's processes through IPC
+
+# process visible in a pod
+# kubectl exec pod-with-host-pid-and-ipc ps aux

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-add-settime-capability
+spec:
+  containers:
+  - name: main
+    image: alpine
+    command: ["/bin/sleep", "999999"]
+    securityContext:                     
+      capabilities:                      
+        add:                             
+        - SYS_TIME                       
+
+# set date
+# kubectl exec -it pod-add-settime-capability -- date +%T -s "12:00:00"
+
+# get date
+# kubectl exec -it pod-add-settime-capability -- date

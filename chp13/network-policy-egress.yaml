@@ -1,0 +1,11 @@
+spec:
+  podSelector:                
+    matchLabels:              
+      app: webserver          
+  egress:                     
+  - to:                       
+    - podSelector:            
+        matchLabels:          
+          app: database       
+
+# Webserver pods may only connect to pods with the app=database label.

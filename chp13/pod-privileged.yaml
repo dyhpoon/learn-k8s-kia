@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-privileged
+spec:
+  containers:
+  - name: main
+    image: alpine
+    command: ["/bin/sleep", "999999"]
+    securityContext:
+      privileged: true                 
+
+# look at /dev folder, its different!
+# those are special files used to communciate with devices
+
+# This means it can use any device freely.
+# For example, I had to use privileged mode like this when I wanted a pod running on a Raspberry Pi to control LEDs connected it.

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-readonly-filesystem
+spec:
+  containers:
+  - name: main
+    image: alpine
+    command: ["/bin/sleep", "999999"]
+    securityContext:                      
+      readOnlyRootFilesystem: true        
+    volumeMounts:                         
+    - name: my-volume                     
+      mountPath: /volume                  
+      readOnly: false                     
+  volumes:
+  - name: my-volume
+    emptyDir:
+
+# kubectl exec -it pod-with-readonly-filesystem touch /new-file
+# touch: /new-file: Read-only file system
+
+# but you can write to the volume
+# kubectl exec -it pod-with-readonly-filesystem touch /volume/newfile
+# kubectl exec -it pod-with-readonly-filesystem -- ls -la /volume/newfile
