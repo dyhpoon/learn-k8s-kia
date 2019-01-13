@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: requests-pod
+spec:
+  containers:
+  - image: busybox
+    command: ["dd", "if=/dev/zero", "of=/dev/null"]
+    name: main              
+    resources:              
+      requests:             
+        cpu: 200m           
+        memory: 10Mi        
+
+# 200millicores = 1/5 fifth of the core
+# kubectl exec -it requests-pod top
+# should see 50% on %CPU coz it can only use one core (single thread)
+# Fifty percent of two cores is obviously one whole core, which means the container is using more than the 200 millicores you requested in the pod specification.

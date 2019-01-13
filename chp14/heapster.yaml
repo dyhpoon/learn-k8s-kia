@@ -1,0 +1,7 @@
+# minikube addon heapster
+# kubectl top nodes
+# kubectl top pods --all-namespaces
+# kubectl top pods --all-namespaces --containers
+
+# to see grafana
+# kubectl cluster-info # find grafana url

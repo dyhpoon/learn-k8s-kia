@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: limits-pod-too-big
+spec:
+  containers:
+  - image: busybox
+    command: ["dd", "if=/dev/zero", "of=/dev/null"]
+    name: main
+    resources:             
+      limits:              
+        cpu: 2
+        memory: 20Mi       
+
+# kubectl apply -f limits.yaml
