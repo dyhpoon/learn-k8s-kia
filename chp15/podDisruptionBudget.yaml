@@ -1,0 +1,2 @@
+# Kubernetes provides a way of specifying the minimum number of pods that need to keep running while performing cluster scale up/down
+# kubectl create pdb kubia-pdb --selector=app=kubia --min-available=3
