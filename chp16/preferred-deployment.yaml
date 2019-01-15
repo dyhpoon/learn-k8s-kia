@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pref
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: pref
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 80
+            preference:
+              matchExpressions:
+              - key: availability-zone
+                operator: In
+                values:
+                - zone1
+          - weight: 20
+            preference:
+              matchExpressions:
+              - key: share-type
+                operator: In
+                values:
+                - dedicated
+      containers:
+      - args:
+        - sleep
+        - "99999"
+        image: busybox
+        name: main
+
+# setup labels to your nodes first
+# kubectl label node node1.k8s availability-zone=zone1
+# kubectl label node node1.k8s share-type=dedicated
+# kubectl label node node2.k8s availability-zone=zone2
+# kubectl label node node2.k8s share-type=shared
+# kubectl get node -L availability-zone -L share-type
+
+# prefer to schedule in AZ1
+# four times less important to schedule in dedicated nodes
+
+# nodes with exact match in `availability-zone` + `share-type` has the highest rank
+# highest priority
+# { az: zone1, share: dedicated }
+# { az: zone1, share: shared }
+# { az: zone2, share: dedicated }
+# { az: zone2, share: shared }
+# lowesr priority

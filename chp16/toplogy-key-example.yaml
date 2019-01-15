@@ -1,0 +1,3 @@
+# reference: frontend-podaffinity-host.yaml
+
+#  If you want, you can easily use your own topologyKey, such as rack, to have the pods scheduled to the same server rack. The only prerequisite is to add a rack label to your nodes.

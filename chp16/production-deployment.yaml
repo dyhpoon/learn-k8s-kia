@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: prod
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        run: test
+    spec:
+      containers:
+      - args:
+        - sleep
+        - "99999"
+        image: busybox
+        imagePullPolicy: Always
+        name: test
+      tolerations:
+      - key: node-type         
+        operator: Equal        
+        value: production      
+        effect: NoSchedule     
+
+# now the pods are scheduled to tainted node & non-tainted node
+
+# if you want the pods not to deploy to non-tainted node
+# also add a taint to the node such as "node-type=non-production:NoSchedule"

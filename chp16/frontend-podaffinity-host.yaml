@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchLabels:
+                app: backend
+      containers:
+      - name: main
+        image: busybox
+        args:
+        - sleep
+        - "99999"
+
+# create a backend pod first
+# kubectl run backend -l app=backend --image busybox -- sleep 999999
+
+# requiredDuringSchedulingIgnoredDuringExecution is a hard requirement
+# and force the frontend pods to be scheduled to the same node
+
+# fact: if you delete the backend pod, your scheduler will still schedule your frontend pods to the same node
+# even though it doesnt define any pod affinity rules itself because otherwise if backend pod were rescheduled to different node
+# the frontend pod's affinity rules would be broken
+
+# fact: Co-locating pods in the same availability zone
+# topologyKey: failure-domain.beta.kubernetes.io/zone
+
+# fact: Co-locating pods in the same geographical region
+# topologyKey: failure-domain.beta.kubernetes.io/regio

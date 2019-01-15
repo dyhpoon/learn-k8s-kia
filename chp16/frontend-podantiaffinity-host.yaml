@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchLabels:
+                app: frontend
+      containers:
+      - name: main
+        image: busybox
+        args:
+        - sleep
+        - "99999"
+
+# A frontend pod must not be scheduled to the same machine as a pod with app=frontend label
+# force the Scheduler to spread pods of the same group across different availability zones or regions
+
+# note that it is using requiredDuringSchedulingIgnoredDuringExecution, so some pods are going to stuck in pending state (if nubmer of pods > number of nodes)
+# so we should use preferredDuringSchedulingIgnoredDuringExecution instead
