@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-tries-preventing-broken-connections
+spec:
+  containers:
+  - image: luksa/kubia
+    name: kubia
+    lifecycle:
+      preStop:
+        exec:
+          command: 
+          - sh
+          - -c
+          - "sleep 5"
+
+# what happend if a pod is killed
+
+# 1. Run the pre-stop hook, if one is configured, and WAIT for it to finish.
+# 2. Send the SIGTERM signal to the main process of the container.
+# 3. Wait until the container shuts down cleanly or until the termination grace period runs out.
+# 4. Forcibly kill the process with SIGKILL, if it hasn’t terminated gracefully yet.
+
+# how do we prevent broken connections when shutting down pods
+# the least you can do is add a pre-stop hook that waits a few seconds, like the one in the following listing, perhaps.
